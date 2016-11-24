@@ -1,0 +1,287 @@
+<html>
+<head>
+    <title>hello(adb2c)</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body style="margin:10px;">
+    <div class="container-fluid">
+        <header class="page-header">
+            <h1>AD B2C Test with Hello.js</h1>
+        </header>
+        <div class="row">
+            <ul class="list-unstyled list-inline">
+                <li><button class="btn btn-info sign-in">Sign-In Policy Login</button></li>
+                <li><button class="btn btn-primary sign-in-api-call-get">Get API call by Sign-In Policy</button></li>
+                <li><button class="btn btn-primary sign-in-api-call-post">Post API call by Sign-In Policy</button></li>
+                <li><button class="btn btn-info sign-in-silent-renew">Silent Renew By Sign-In Policy</button></li>
+                <li><button class="btn btn-info sign-in-logout">Sign-In Policy Logout</button></li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="list-unstyled list-inline">
+                <li><button class="btn btn-info sign-up-sign-in">Sign-In or Sign-Up Policy Login</button></li>
+                <li><button class="btn btn-primary sign-up-sign-in-api-call-get">Get API call by Sign-Up or Sign-In Policy</button></li>
+                <li><button class="btn btn-primary sign-up-sign-in-api-call-post">Post API call by Sign-Up or Sign-In Policy</button></li>
+                <li><button class="btn btn-info sign-up-sign-in-silent-renew">Silent Renew By Sign-Up or Sign-In Policy</button></li>
+                <li><button class="btn btn-info sign-up-sign-in-logout">Sign-Up or Sign-In Policy Logout</button></li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="list-unstyled list-inline">
+                <li><button class="btn btn-info edit-profile">Edit Profile Policy Login</button></li>
+                <li><button class="btn btn-primary edit-profile-api-call-get">Get API call by Edit Profile Policy</button></li>
+                <li><button class="btn btn-primary edit-profile-api-call-post">Post API call by Edit Profile Policy</button></li>
+                <!--<li><button class="btn btn-info edit-profile-silent-renew">Silent Renew By Edit Profile Policy</button></li>-->
+                <li><button class="btn btn-info edit-profile-logout">Edit Profile Policy Logout</button></li>
+            </ul>
+        </div>
+    </div>
+    <h5>Auth Response</h5>
+    <pre class="response"></pre>
+    <h5>API Response</h5>
+    <pre class="api-response"></pre>
+    <h6>Application built on V2JSApp created on portal.azure.com b2c applications</h6>
+
+    <!--BEGIN: Scripts-->
+    <script src="scripts/hello.all.js"></script>
+    <script src="aadb2c.js" class="pre"></script>
+    <script src="scripts/jquery-3.1.1.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/bootbox.min.js"></script>
+
+
+    <script class="pre">
+        
+        //clientId is the applicaionID created in AD B2C portal
+        var clientId = '2ea10cce-58f2-4b26-8b5a-65d75553aac1';
+        var scope = 'openid ' + clientId;
+        var responseType = 'token id_token';
+        var redirectURI = '../redirect.html';
+
+        //API url for task service
+        var apiBaseURL = 'http://localhost:30537';
+        var apiTasksURL = apiBaseURL + '/api/Tasks';;
+
+        //update the policy names with the exact name from the AD B2C policies blade
+        var policies = {
+            signInPolicy: "B2C_1_sign_in",
+            editProfilePolicy: "B2C_1_edit_profile",
+            signInSignUpPolicy: "B2C_1_b2c_1_sign_in_sign_up"
+        };
+
+        //initiate all policies
+        hello.init({
+            adB2CSignIn: clientId,
+            adB2CSignInSignUp: clientId,
+            adB2CEditProfile: clientId
+        }, {
+            redirect_uri: '../redirect.html',
+            scope: 'openid ' + clientId,
+            response_type: 'token id_token'
+        });
+    </script>
+
+    <script class="pre">
+        var loginDisplayType = {
+            PopUp: 'popup',
+            None: 'none',
+            Page: 'page' //default is popup, if we use page option, webpage gets redirected to b2c login page then to redirect html.
+
+        };
+
+        var helloNetwork = {
+            adB2CSignIn: 'adB2CSignIn',
+            adB2CSignInSignUp: 'adB2CSignInSignUp',
+            adB2CEditProfile: 'adB2CEditProfile'
+        };
+
+        $(function () {
+
+            bindSignInPolicyEventHandlers();
+
+            bindSignUpSignInPolicyEventHandlers();
+
+            bindEditProfilePolicyEventHandlers();
+        });
+
+        function bindSignInPolicyEventHandlers() {
+            /*
+            * SIGN-IN POLICY HANDLERS
+            */
+            $('.sign-in').on('click', function () {
+                policyLogin(helloNetwork.adB2CSignIn, loginDisplayType.PopUp);
+            });
+
+            $('.sign-in-api-call-get').on('click', function () {
+                getTasks(helloNetwork.adB2CSignIn);
+            });
+
+            $('.sign-in-api-call-post').on('click', function () {
+                postTask(helloNetwork.adB2CSignIn);
+            });
+
+
+            $('.sign-in-silent-renew').on('click', function () {
+                policyLogin(helloNetwork.adB2CSignIn, loginDisplayType.None);
+            });
+
+
+            $('.sign-in-logout').on('click', function () {
+                policyLogout(helloNetwork.adB2CSignIn, policies.signInPolicy);
+            });
+        }
+
+        function bindSignUpSignInPolicyEventHandlers() {
+            /*
+             * SIGN-UP OR SIGN-IN POLICY HANDLERS
+             */
+            $('.sign-up-sign-in').on('click', function () {
+                policyLogin(helloNetwork.adB2CSignInSignUp, loginDisplayType.PopUp);
+            });
+
+            $('.sign-up-sign-in-api-call-get').on('click', function () {
+                getTasks(helloNetwork.adB2CSignInSignUp);
+            });
+
+            $('.sign-up-sign-in-api-call-post').on('click', function () {
+                postTask(helloNetwork.adB2CSignInSignUp);
+            });
+
+            $('.sign-up-sign-in-silent-renew').on('click', function () {
+                policyLogin(helloNetwork.adB2CSignInSignUp, loginDisplayType.None);
+            });
+            $('.sign-up-sign-in-logout').on('click', function () {
+                policyLogout(helloNetwork.adB2CSignInSignUp, policies.signInSignUpPolicy);
+            });
+        }
+
+        function bindEditProfilePolicyEventHandlers() {
+            /*
+             * Edit Profile POLICY HANDLERS
+             */
+            $('.edit-profile').on('click', function () {
+                policyLogin(helloNetwork.adB2CEditProfile, loginDisplayType.PopUp);
+            });
+
+            $('.edit-profile-api-call-get').on('click', function () {
+                getTasks(helloNetwork.adB2CEditProfile);
+            });
+
+            $('.edit-profile-api-call-post').on('click', function () {
+                postTask(helloNetwork.adB2CEditProfile);
+            });
+
+    
+            $('.edit-profile-logout').on('click', function () {
+                policyLogout(helloNetwork.adB2CEditProfile, policies.editProfilePolicy);
+            });
+        }
+
+        function online(session) {
+            var currentTime = (new Date()).getTime() / 1000;
+            return session && session.access_token && session.expires > currentTime;
+        };
+
+        function policyLogin(network, displayType) {
+            if (!displayType) {
+                displayType = 'popup';
+            }
+
+            var b2cSession = hello(network).getAuthResponse();
+
+            //in case of silent renew, check if the session is still active otherwise ask the user to login again
+            if (!online(b2cSession) && displayType === loginDisplayType.None) {
+                bootbox.alert('Session expired... please login again', function () {
+                    policyLogin(network,
+                        loginDisplayType.PopUp);
+                });
+                return;
+            }
+
+            hello(network).login({ display: displayType }, log).then(function (auth) {
+                if (displayType === loginDisplayType.None)
+                    bootbox.alert('silently renewed the token with Azure AD B2C');
+                else
+                    bootbox.alert('You are signed in to AD B2C');
+            }, function (e) {
+                if ('Iframe was blocked' in e.error.message) {
+                    policyLogin(network, loginDisplayType.PopUp);
+                    return;
+                }
+                bootbox.alert('Signin error: ' + e.error.message);
+            });
+        }
+
+        function policyLogout(network, policy) {
+
+            hello.logout(network, { force: true }).then(function (auth) {
+                bootbox.alert('policy: ' + policy + ' You are logging out from AD B2C');
+            }, function (e) {
+                bootbox.alert('Logout error: ' + e.error.message);
+            });
+        }
+
+        /*API*/
+        function getTasks(network) {
+            var authResponse = hello(network).getAuthResponse();
+            hello(network).api({
+                path: apiTasksURL,
+                method: 'get',
+                headers: {
+                    Authorization: authResponse.token_type + ' ' + authResponse.access_token }
+            }).then(function (response) {
+                if (response.Message) {
+                    bootbox.alert(response.Message);
+                }
+                logAPIResponse(response);
+            }, function (e) {
+                logAPIResponse('API error: ' + e.error.message);
+            });
+        }
+
+        function postTask(network) {
+            var d = new Date();
+            var n = d.toString();
+            var authResponse = hello(network).getAuthResponse();
+            if (authResponse != null) {
+                hello(network).api({
+                    path: apiTasksURL,
+                    method: 'post', data: { text: n },
+                    headers: { Authorization: authResponse.token_type + ' ' + authResponse.access_token }
+                }).then(function (response) {
+                    if (response.Message) {
+                        bootbox.alert(response.Message);
+                    }
+                    else {
+                        bootbox.alert("Task has been added with name: " + n);
+                    }
+                }, function (e) {
+                    logAPIResponse('API error: ' + e.error.message);
+                });
+            }
+            else {
+                bootbox.alert("Please login");
+            }
+        }
+    </script>
+
+    <script>
+        function log(s) {
+            if (typeof s.error !== 'undefined' && s.error !== null) {
+                if (s.error.code === 'blocked') {   //silentrenew(display: none) in case of expired token returns X-frame Options as DENY error
+                    bootbox.alert("<p class='bg-danger'>there was an error in silent renewing the token. Please login again</p>");
+                    return;
+                }
+            }
+            else
+                document.body.querySelector('.response')
+                    .appendChild(document.createTextNode(JSON.stringify(s, true, 2)));
+        }
+
+        function logAPIResponse(s) {
+            $('.api-response').html(JSON.stringify(s, true, 2));
+        }
+    </script>
+    <!--END: Scripts-->
+</body>
+</html>
