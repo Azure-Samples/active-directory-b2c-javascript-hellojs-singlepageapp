@@ -6,9 +6,33 @@ The app is a simple web application that performs sign-in, sign-up, and sign-out
 
 ##### Please note that this functionality is still in "preview"
 
+## Hello.JS 
+
+Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 (and OAuth1 with a oauth proxy) web services and querying their REST APIs.
+
+For more details about hello.js check their [Documentation](https://adodson.com/hello.js/#hellojs)
+
+Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that they work with Azure AD B2C (with documented fixes). Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
+
+##### Version Details
+
+Azure B2C application built with hello.js library version 1.14.0
+
+##### Azure B2C Fixes in hello.js library
+
+Following are the fixes has been made to make hello.js library work with Azure B2C scenarios
+
+- Added authorize query string parameter "State" to local storage as Azure B2C authorize endpoint not returning state properly.
+	- `localStorage.setItem("b2cauthState", JSON.stringify(JSON.parse(decodeURIComponent(p.qs.state))));`
+- Re-assigning the state from the localstorage where ever required 
+	- `p.state = localStorage.getItem("b2cauthState");`
+- silent renew fails with X-Frame Options DENY error in case of expired token. To fix this code has been taken from the [github issue](https://github.com/MrSwitch/hello.js/issues/379)
+
+
+
 ## Release Notes
-    - Automatic Refresh of tokens is not supported by Hello.js. But code can be added to track the expiry and do silent renew
-    - Silent renew is not supported by Amazon
+
+    Silent renew is not supported by Amazon and Microsoft Authentication
 
 
 ## How To Run This Sample
@@ -51,21 +75,21 @@ Now you can replace the app's default configuration with your own.
 
 ##### In the B2C-v2jsapp solution
 
-open the index.html file and replace the clientId and policy names
+open the index.html file and replace the applicationID and policy names
 
 ```javascript
-        //B2C Global Settings
-        var clientId = 'ClientId guid';
-        var scope = 'openid ' + clientId;
-        // ignore other code here
+    //applicaionID created in AD B2C portal
+    var applicationId = '2ea10cce-58f2-4b26-8b5a-65d75553aac1';
+    var scope = 'openid ' + applicationId;
+    // ignore other code here
 
-        var policies = {
-            signInPolicy: "B2C_1_sign_in",
-            editProfilePolicy: "B2C_1_edit_profile",
-            signInSignUpPolicy: "B2C_1_b2c_1_sign_in_sign_up"
-        };
+    var policies = {
+    signInPolicy: "B2C_1_sign_in",
+    editProfilePolicy: "B2C_1_edit_profile",
+    signInSignUpPolicy: "B2C_1_b2c_1_sign_in_sign_up"
+    };
 ```
-open the aadb2c.js and replace the clientId and policy names
+open the aadb2c.js and replace the tenant name and policy names
 
 ```javascript
 
@@ -79,11 +103,11 @@ open the aadb2c.js and replace the clientId and policy names
 
 ##### In the TaskService project
 
-replace tenant, ClientId and PolicyNames in the web.config
+replace tenant, applicationId and PolicyNames in the web.config
 
 ```xml
     <add key="ida:Tenant" value="tenantname.onmicrosoft.com" />
-    <add key="ida:ClientId" value="ClientId guid" />
+    <add key="ida:ApplicationId" value="application id" />
     <add key="ida:SignUpSignInPolicyId" value="B2C_1_b2c_1_sign_in_sign_up" />
     <add key="ida:SignInPolicyId" value="B2C_1_sign_in" />
     <add key="ida:UserProfilePolicyId" value="B2C_1_edit_profile" />
@@ -92,5 +116,8 @@ replace tenant, ClientId and PolicyNames in the web.config
 
 ### Step 6:  Run the sample
 
-Clean the solution, rebuild the solution, and run it.  You can now sign up / sign in /edit profile to your application using the accounts you configured in your respective policies. Once the user is signed in with a policy POST a task to the service and GET the tasks already created. Silent Renew the token before expiry t get the refresh token.
+open the B2C-v2jsapp.sln in visual studio 2015
+Set the B2C-v2jsapp project as the Startup project
+
+Clean and rebuild the solution, and run it.  You can now sign up / sign in /edit profile to your application using the accounts you configured in your respective policies. Once the user is signed in with a policy POST a task to the service and GET the tasks already created.
 

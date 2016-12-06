@@ -18,15 +18,13 @@ namespace TaskService
         // These values are pulled from web.config
         public static string aadInstance = ConfigurationManager.AppSettings["ida:AadInstance"];
         public static string tenant = ConfigurationManager.AppSettings["ida:Tenant"];
-        public static string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
-        //public static string signUpPolicy = ConfigurationManager.AppSettings["ida:SignUpPolicyId"];
+        public static string clientId = ConfigurationManager.AppSettings["ida:ApplicationId"];
         public static string signUpSignInPolicy = ConfigurationManager.AppSettings["ida:SignUpSignInPolicyId"];
         public static string signInPolicy = ConfigurationManager.AppSettings["ida:SignInPolicyId"];
         public static string editProfilePolicy = ConfigurationManager.AppSettings["ida:UserProfilePolicyId"];
 
         public void ConfigureAuth(IAppBuilder app)
-        {
-            //app.UseOAuthBearerAuthentication(CreateBearerOptionsFromPolicy(signUpPolicy));
+        {   
             app.UseOAuthBearerAuthentication(CreateBearerOptionsFromPolicy(signUpSignInPolicy));
             app.UseOAuthBearerAuthentication(CreateBearerOptionsFromPolicy(signInPolicy));
             app.UseOAuthBearerAuthentication(CreateBearerOptionsFromPolicy(editProfilePolicy));

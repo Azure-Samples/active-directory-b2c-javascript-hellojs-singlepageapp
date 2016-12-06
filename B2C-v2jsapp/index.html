@@ -101,15 +101,7 @@
 
             bindEditProfilePolicyEventHandlers();
 
-            //Displaying Auth Response if user already loggedin
-            var adB2CSignInAuthResponse = hello.getAuthResponse(helloNetwork.adB2CSignIn);
-            if (adB2CSignInAuthResponse) { log(adB2CSignInAuthResponse) };
-
-            var adB2CSignInSignUpAuthResponse = hello.getAuthResponse(helloNetwork.adB2CSignInSignUp);
-            if (adB2CSignInSignUpAuthResponse) { log(adB2CSignInSignUpAuthResponse) };
-
-            var adB2CEditProfileAuthResponse = hello.getAuthResponse(helloNetwork.adB2CEditProfile);
-            if (adB2CEditProfileAuthResponse) { log(adB2CEditProfileAuthResponse) };
+            hello.on('auth.login', function(auth) { bootbox.alert("logged in/silently renewed the token");log(auth); });
 
         });
 
