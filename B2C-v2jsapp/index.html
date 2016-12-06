@@ -101,7 +101,7 @@
 
             bindEditProfilePolicyEventHandlers();
 
-            hello.on('auth.login', function(auth) { bootbox.alert("logged in/silently renewed the token");log(auth); });
+            hello.on('auth.login', function (auth) { bootbox.alert("signed in or silently renewed the token with Azure AD B2C"); log(auth); });
 
         });
 
@@ -201,10 +201,6 @@
             }
 
             hello(network).login({ display: displayType }, log).then(function (auth) {
-                if (displayType === loginDisplayType.None)
-                    bootbox.alert('silently renewed the token with Azure AD B2C');
-                else
-                    bootbox.alert('You are signed in to AD B2C');
             }, function (e) {
                 if ('Iframe was blocked' in e.error.message) {
                     policyLogin(network, loginDisplayType.Page);
