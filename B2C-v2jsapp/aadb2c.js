@@ -12,7 +12,7 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
 /*
  * B2C Sign In Policy Configuration
  */
-(function(hello) {
+(function (hello) {
     "use strict";
     hello.init({
         adB2CSignIn: {
@@ -36,19 +36,24 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 }
             },
             logout: function (p) {
+                //get id_token from auth response
+                var id_token = hello(helloJsSignPolicy).getAuthResponse().id_token;
+                //clearing local storage session
+                hello.utils.store(helloJsSignPolicy, null);
+
+                //redirecting to Azure B2C logout URI
                 window.location = "https://login.microsoftonline.com/" + tenantName + "/oauth2/v2.0/logout?p=" + signInPolicyName + "&id_token_hint=" +
-                        hello(helloJsSignPolicy).getAuthResponse().id_token +
-                        "&post_logout_redirect_uri=" + redirect_uri;
+                        id_token + "&post_logout_redirect_uri=" + redirect_uri;
             },
             xhr: function (p) {
                 if (p.method === 'post' || p.method === 'put') {
                     //toJSON(p);
-                    if (typeof(p.data) === 'object') {
+                    if (typeof (p.data) === 'object') {
                         // Convert the POST into a javascript object
                         try {
                             p.data = JSON.stringify(p.data);
                             p.headers['content-type'] = 'application/json';
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 } else if (p.method === 'patch') {
                     hello.utils.extend(p.query, p.data);
@@ -92,19 +97,24 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 }
             },
             logout: function () {
+                //get id_token from auth response
+                var id_token = hello(helloJsSignInSignUpPolicy).getAuthResponse().id_token;
+                //clearing local storage session
+                hello.utils.store(helloJsSignInSignUpPolicy, null);
+
+                //redirecting to Azure B2C logout URI
                 window.location = "https://login.microsoftonline.com/" + tenantName + "/oauth2/v2.0/logout?p=" + signInSignUpPolicyName + "&id_token_hint=" +
-                        hello(helloJsSignInSignUpPolicy).getAuthResponse().id_token +
-                        "&post_logout_redirect_uri=" + redirect_uri;
+                        id_token + "&post_logout_redirect_uri=" + redirect_uri;
             },
             xhr: function (p) {
                 if (p.method === 'post' || p.method === 'put') {
                     //toJSON(p);
-                    if (typeof(p.data) === 'object') {
+                    if (typeof (p.data) === 'object') {
                         // Convert the POST into a javascript object
                         try {
                             p.data = JSON.stringify(p.data);
                             p.headers['content-type'] = 'application/json';
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 } else if (p.method === 'patch') {
                     hello.utils.extend(p.query, p.data);
@@ -147,19 +157,24 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 }
             },
             logout: function (p) {
+                //get id_token from auth response
+                var id_token = hello(helloJsEditProfilePolicy).getAuthResponse().id_token;
+                //clearing local storage session
+                hello.utils.store(helloJsEditProfilePolicy, null);
+
+                //redirecting to Azure B2C logout URI
                 window.location = "https://login.microsoftonline.com/" + tenantName + "/oauth2/v2.0/logout?p=" + editProfilePolicyName + "&id_token_hint=" +
-                        hello(helloJsEditProfilePolicy).getAuthResponse().id_token +
-                        "&post_logout_redirect_uri=" + redirect_uri;
+                        id_token + "&post_logout_redirect_uri=" + redirect_uri;
             },
             xhr: function (p) {
                 if (p.method === 'post' || p.method === 'put') {
                     //toJSON(p);
-                    if (typeof(p.data) === 'object') {
+                    if (typeof (p.data) === 'object') {
                         // Convert the POST into a javascript object
                         try {
                             p.data = JSON.stringify(p.data);
                             p.headers['content-type'] = 'application/json';
-                        } catch (e) {}
+                        } catch (e) { }
                     }
                 } else if (p.method === 'patch') {
                     hello.utils.extend(p.query, p.data);
