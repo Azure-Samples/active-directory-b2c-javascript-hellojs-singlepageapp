@@ -40,6 +40,7 @@ Following are the fixes has been made to make hello.js library work with Azure B
 Getting started is simple! To run this sample you will need:
 
 - Visual Studio 2015
+- Sql Server Local Instance (Express is sufficient)
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 

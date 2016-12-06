@@ -22,6 +22,7 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 auth: "https://login.microsoftonline.com/tfp/" + tenantName + "/" + signInPolicyName + "/oauth2/v2.0/authorize",
                 grant: "https://login.microsoftonline.com/tfp/" + tenantName + "/" + signInPolicyName + "/oauth2/v2.0/token"
             },
+            refresh: true,
             // Authorization scopes
             scope: {
                 // you can add as many scopes to the mapping as you want here
