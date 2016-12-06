@@ -116,7 +116,7 @@ replace tenant, applicationId and PolicyNames in the web.config
 
 ### Step 6:  Run the sample
 
-open the B2C-v2jsapp.sln in visual studio 2015. Set the B2C-v2jsapp project as the Startup project
+open the B2C-v2jsapp.sln in visual studio 2015. Right click on solution, click Properties and Choose multiple Startup projects. Set both the Projects to Start.
 
 If there are issues with nuget package restore in TaskService project, open Package Manager Console and run
 
