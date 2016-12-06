@@ -116,8 +116,11 @@ replace tenant, applicationId and PolicyNames in the web.config
 
 ### Step 6:  Run the sample
 
-open the B2C-v2jsapp.sln in visual studio 2015
-Set the B2C-v2jsapp project as the Startup project
+open the B2C-v2jsapp.sln in visual studio 2015. Set the B2C-v2jsapp project as the Startup project
+
+If there are issues with nuget package restore in TaskService project, open Package Manager Console and run
+
+	Update-Package -Reinstall -ProjectName TaskService
 
 Clean and rebuild the solution, and run it.  You can now sign up / sign in /edit profile to your application using the accounts you configured in your respective policies. Once the user is signed in with a policy POST a task to the service and GET the tasks already created.
 
