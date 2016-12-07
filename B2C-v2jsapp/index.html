@@ -30,8 +30,7 @@
             <ul class="list-unstyled list-inline">
                 <li><button class="btn btn-info edit-profile">Edit Profile Policy Login</button></li>
                 <li><button class="btn btn-primary edit-profile-api-call-get">Get API call by Edit Profile Policy</button></li>
-                <li><button class="btn btn-primary edit-profile-api-call-post">Post API call by Edit Profile Policy</button></li>
-                <!--<li><button class="btn btn-info edit-profile-silent-renew">Silent Renew By Edit Profile Policy</button></li>-->
+                <li><button class="btn btn-primary edit-profile-api-call-post">Post API call by Edit Profile Policy</button></li>                
                 <li><button class="btn btn-info edit-profile-logout">Edit Profile Policy Logout</button></li>
             </ul>
         </div>
@@ -40,8 +39,7 @@
     <pre class="response"></pre>
     <h5>API Response</h5>
     <pre class="api-response"></pre>
-    <h6>Application built on V2JSApp created on portal.azure.com b2c applications</h6>
-
+    
     <!--BEGIN: Scripts-->
     <script src="scripts/hello.all.js"></script>
     <script src="aadb2c.js" class="pre"></script>
@@ -52,9 +50,9 @@
 
     <script class="pre">
         
-        //clientId is the applicaionID created in AD B2C portal
-        var clientId = '2ea10cce-58f2-4b26-8b5a-65d75553aac1';
-        var scope = 'openid ' + clientId;
+        //applicaionID created in AD B2C portal
+        var applicationId = '2ea10cce-58f2-4b26-8b5a-65d75553aac1';
+        var scope = 'openid ' + applicationId;
         var responseType = 'token id_token';
         var redirectURI = '../redirect.html';
 
@@ -71,12 +69,12 @@
 
         //initiate all policies
         hello.init({
-            adB2CSignIn: clientId,
-            adB2CSignInSignUp: clientId,
-            adB2CEditProfile: clientId
+            adB2CSignIn: applicationId,
+            adB2CSignInSignUp: applicationId,
+            adB2CEditProfile: applicationId
         }, {
             redirect_uri: '../redirect.html',
-            scope: 'openid ' + clientId,
+            scope: 'openid ' + applicationId,
             response_type: 'token id_token'
         });
     </script>
@@ -102,6 +100,9 @@
             bindSignUpSignInPolicyEventHandlers();
 
             bindEditProfilePolicyEventHandlers();
+
+            hello.on('auth.login', function (auth) { bootbox.alert("signed in or silently renewed the token with Azure AD B2C"); log(auth); });
+
         });
 
         function bindSignInPolicyEventHandlers() {
@@ -109,7 +110,7 @@
             * SIGN-IN POLICY HANDLERS
             */
             $('.sign-in').on('click', function () {
-                policyLogin(helloNetwork.adB2CSignIn, loginDisplayType.PopUp);
+                policyLogin(helloNetwork.adB2CSignIn, loginDisplayType.Page);
             });
 
             $('.sign-in-api-call-get').on('click', function () {
@@ -136,7 +137,7 @@
              * SIGN-UP OR SIGN-IN POLICY HANDLERS
              */
             $('.sign-up-sign-in').on('click', function () {
-                policyLogin(helloNetwork.adB2CSignInSignUp, loginDisplayType.PopUp);
+                policyLogin(helloNetwork.adB2CSignInSignUp, loginDisplayType.Page);
             });
 
             $('.sign-up-sign-in-api-call-get').on('click', function () {
@@ -160,7 +161,7 @@
              * Edit Profile POLICY HANDLERS
              */
             $('.edit-profile').on('click', function () {
-                policyLogin(helloNetwork.adB2CEditProfile, loginDisplayType.PopUp);
+                policyLogin(helloNetwork.adB2CEditProfile, loginDisplayType.Page);
             });
 
             $('.edit-profile-api-call-get').on('click', function () {
@@ -178,13 +179,15 @@
         }
 
         function online(session) {
+
             var currentTime = (new Date()).getTime() / 1000;
             return session && session.access_token && session.expires > currentTime;
         };
 
         function policyLogin(network, displayType) {
+
             if (!displayType) {
-                displayType = 'popup';
+                displayType = 'page';
             }
 
             var b2cSession = hello(network).getAuthResponse();
@@ -192,20 +195,15 @@
             //in case of silent renew, check if the session is still active otherwise ask the user to login again
             if (!online(b2cSession) && displayType === loginDisplayType.None) {
                 bootbox.alert('Session expired... please login again', function () {
-                    policyLogin(network,
-                        loginDisplayType.PopUp);
+                    policyLogin(network, loginDisplayType.Page);
                 });
                 return;
             }
 
             hello(network).login({ display: displayType }, log).then(function (auth) {
-                if (displayType === loginDisplayType.None)
-                    bootbox.alert('silently renewed the token with Azure AD B2C');
-                else
-                    bootbox.alert('You are signed in to AD B2C');
             }, function (e) {
                 if ('Iframe was blocked' in e.error.message) {
-                    policyLogin(network, loginDisplayType.PopUp);
+                    policyLogin(network, loginDisplayType.Page);
                     return;
                 }
                 bootbox.alert('Signin error: ' + e.error.message);
@@ -223,23 +221,31 @@
 
         /*API*/
         function getTasks(network) {
+
             var authResponse = hello(network).getAuthResponse();
-            hello(network).api({
-                path: apiTasksURL,
-                method: 'get',
-                headers: {
-                    Authorization: authResponse.token_type + ' ' + authResponse.access_token }
-            }).then(function (response) {
-                if (response.Message) {
-                    bootbox.alert(response.Message);
-                }
-                logAPIResponse(response);
-            }, function (e) {
-                logAPIResponse('API error: ' + e.error.message);
-            });
+            if (authResponse != null) {
+                hello(network).api({
+                    path: apiTasksURL,
+                    method: 'get',
+                    headers: {
+                        Authorization: authResponse.token_type + ' ' + authResponse.access_token
+                    }
+                }).then(function (response) {
+                    if (response.Message) {
+                        bootbox.alert(response.Message);
+                    }
+                    logAPIResponse(response);
+                }, function (e) {
+                    logAPIResponse('API error: ' + e.error.message);
+                });
+            }
+            else {
+                bootbox.alert("Please login");
+            }
         }
 
         function postTask(network) {
+
             var d = new Date();
             var n = d.toString();
             var authResponse = hello(network).getAuthResponse();
@@ -267,6 +273,7 @@
 
     <script>
         function log(s) {
+            
             if (typeof s.error !== 'undefined' && s.error !== null) {
                 if (s.error.code === 'blocked') {   //silentrenew(display: none) in case of expired token returns X-frame Options as DENY error
                     bootbox.alert("<p class='bg-danger'>there was an error in silent renewing the token. Please login again</p>");

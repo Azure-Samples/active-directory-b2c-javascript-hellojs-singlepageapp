@@ -6,9 +6,32 @@ The app is a simple web application that performs sign-in, sign-up, and sign-out
 
 ##### Please note that this functionality is still in "preview"
 
+## Hello.JS 
+
+Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 web services and querying their REST APIs. For more details about hello.js, check out their [documentation](https://adodson.com/hello.js/#hellojs).
+
+Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that they work with Azure AD B2C (with documented fixes). Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
+
+##### Version Details
+
+This application has been built with hello.js library version 1.14.0 (with documented fixes).
+
+##### Local fixes made to the hello.js library
+
+The following fixes were needed to make the hello.js library work with Azure AD B2C:
+
+- Added the /authorize query string parameter "state" to local storage. There is a known issue with the Azure AD B2C /authorize endpoint returning an improper “state” value.
+  * ` localStorage.setItem("b2cauthState", JSON.stringify(JSON.parse(decodeURIComponent(p.qs.state))));`
+
+- Re-assigning the “state” parameter from the local storage where ever required.
+  * `p.state = localStorage.getItem("b2cauthState");`
+- Silent renewal of tokens fails with “X-Frame Options DENY” error, if tokens have already expired. Code from this github issue has been incorporated to fix this issue.
+
+
 ## Release Notes
-    - Automatic Refresh of tokens is not supported by Hello.js. But code can be added to track the expiry and do silent renew
-    - Silent renew is not supported by Amazon
+
+- Silent renewing of access tokens is not supported by Amazon and Microsoft account.
+- Local fixes have been made to the hello.js library to make it work with Azure AD B2C.
 
 
 ## How To Run This Sample
@@ -16,6 +39,7 @@ The app is a simple web application that performs sign-in, sign-up, and sign-out
 Getting started is simple! To run this sample you will need:
 
 - Visual Studio 2015
+- Sql Server Local Instance (Express is sufficient)
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 
@@ -33,7 +57,7 @@ You can also modify the sample to use your own Azure AD B2C tenant.  First, you'
 
 This sample uses three types of policies: a sign-in policy, a sign-up policy & profile editing policy.  Create one policy of each type by following [the instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish.
 
-If you already have existing policies in your B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
+If you already have existing policies in your Azure AD B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
 
 ### Step 4: Create your own application
 
@@ -45,27 +69,27 @@ Now you need to create your own appliation in your B2C tenant, so that your app 
     - `http://localhost:65328/redirect.html`
 - Copy the client ID generated for your application, so you can use it in the next step.
 
-### Step 5: Configure the sample to use your B2C tenant
+### Step 5: Configure the sample to use your Azure AD B2C tenant
 
 Now you can replace the app's default configuration with your own.  
 
 ##### In the B2C-v2jsapp solution
 
-open the index.html file and replace the clientId and policy names
+open the index.html file and replace the applicationID and policy names
 
 ```javascript
-        //B2C Global Settings
-        var clientId = 'ClientId guid';
-        var scope = 'openid ' + clientId;
-        // ignore other code here
+    //applicaionID created in AD B2C portal
+    var applicationId = '2ea10cce-58f2-4b26-8b5a-65d75553aac1';
+    var scope = 'openid ' + applicationId;
+    // ignore other code here
 
-        var policies = {
-            signInPolicy: "B2C_1_sign_in",
-            editProfilePolicy: "B2C_1_edit_profile",
-            signInSignUpPolicy: "B2C_1_b2c_1_sign_in_sign_up"
-        };
+    var policies = {
+    signInPolicy: "B2C_1_sign_in",
+    editProfilePolicy: "B2C_1_edit_profile",
+    signInSignUpPolicy: "B2C_1_b2c_1_sign_in_sign_up"
+    };
 ```
-open the aadb2c.js and replace the clientId and policy names
+open the aadb2c.js and replace the tenant name and policy names
 
 ```javascript
 
@@ -79,11 +103,11 @@ open the aadb2c.js and replace the clientId and policy names
 
 ##### In the TaskService project
 
-replace tenant, ClientId and PolicyNames in the web.config
+replace tenant, applicationId and PolicyNames in the web.config
 
 ```xml
     <add key="ida:Tenant" value="tenantname.onmicrosoft.com" />
-    <add key="ida:ClientId" value="ClientId guid" />
+    <add key="ida:ApplicationId" value="application id" />
     <add key="ida:SignUpSignInPolicyId" value="B2C_1_b2c_1_sign_in_sign_up" />
     <add key="ida:SignInPolicyId" value="B2C_1_sign_in" />
     <add key="ida:UserProfilePolicyId" value="B2C_1_edit_profile" />
@@ -92,5 +116,11 @@ replace tenant, ClientId and PolicyNames in the web.config
 
 ### Step 6:  Run the sample
 
-Clean the solution, rebuild the solution, and run it.  You can now sign up / sign in /edit profile to your application using the accounts you configured in your respective policies. Once the user is signed in with a policy POST a task to the service and GET the tasks already created. Silent Renew the token before expiry t get the refresh token.
+open the B2C-v2jsapp.sln in visual studio 2015. Right click on solution, click Properties and Choose multiple Startup projects. Set both the Projects to Start.
+
+If there are issues with nuget package restore in TaskService project, open Package Manager Console and run
+
+	Update-Package -Reinstall -ProjectName TaskService
+
+Clean and rebuild the solution, and run it.  You can now sign up / sign in /edit profile to your application using the accounts you configured in your respective policies. Once the user is signed in with a policy POST a task to the service and GET the tasks already created.
 

@@ -422,9 +422,7 @@ hello.utils.extend(hello, {
 				redirect_uri: redirectUri
 			}
 		});
-        //B2C-Updated
-		localStorage.removeItem("b2cauthState");
-		localStorage.setItem("b2cauthState", JSON.stringify(p.qs.state));
+
 		// Get current session for merging scopes, and for quick auth response
 		var session = utils.store(p.network);
 
@@ -550,6 +548,11 @@ hello.utils.extend(hello, {
 		// Broadcast this event as an auth:init
 		emit('auth.init', p);
 
+	    //Microsoft Azure B2C Fix
+	    /* Fix for state miss match between Azure B2C and application */
+		localStorage.removeItem("b2cauthState");//Removing any existing authentication state
+		localStorage.setItem("b2cauthState", JSON.stringify(JSON.parse(decodeURIComponent(p.qs.state))));//Adding authorize query string state parameter data to local storage item
+
 		// Execute
 		// Trigger how we want self displayed
 		//if (opts.display === 'none') {
@@ -557,6 +560,8 @@ hello.utils.extend(hello, {
 		//	utils.iframe(url, redirectUri);
 	    //}
 
+		//Microsoft Azure B2C Fix
+	      /* Fix catching iframe error when silentrenew fails  */
 		if (opts.display === 'none') {
 		    // Sign-in in the background, iframe
 		    utils.iframe(url, function (err) {
@@ -607,7 +612,7 @@ hello.utils.extend(hello, {
 	// @param string name of the service
 	// @param function callback
 	logout: function() {
-	    
+
 		var _this = this;
 		var utils = _this.utils;
 		var error = utils.error;
@@ -939,7 +944,10 @@ hello.utils.extend(hello.utils, {
 	//	this.append('iframe', {src: src, style: {position:'absolute', left: '-1000px', bottom: 0, height: '1px', width: '1px'}}, 'body');
     //},
 
-
+        
+	//Microsoft Azure B2C Fix
+    /* to fix the Xframe DENY Error code is updated from the github issue  */
+	/* https://github.com/MrSwitch/hello.js/issues/379 */
 	iframe: function (src, cb) {
 	    var ifr = this.append('iframe', { src: src, style: { position: 'absolute', left: '-1000px', bottom: 0, height: '1px', width: '1px' } }, 'body');
 
@@ -958,8 +966,6 @@ hello.utils.extend(hello.utils, {
 	    }
 
 	},
-
-
 
 	// Recursive merge two objects into one, second parameter overides the first
 	// @param a array
@@ -1477,14 +1483,15 @@ hello.utils.extend(hello.utils, {
 		var _this = this;
 		var p;
 		var location = window.location;
-		
+
 		// Is this an auth relay message which needs to call the proxy?
 		p = _this.param(location.search);
-       
+
 		// OAuth2 or OAuth1 server response?
 		if (p && p.state && (p.code || p.oauth_token)) {
-		    //B2C-Updated
-		    p.state = localStorage.getItem("b2cauthState");
+
+		    //Microsoft Azure B2C Fix
+		    p.state = localStorage.getItem("b2cauthState");//getting stored state from local storage and re-assign to state variable
 
 			var state = JSON.parse(p.state);
 
@@ -1506,10 +1513,12 @@ hello.utils.extend(hello.utils, {
 		// SoundCloud is the state in the querystring and the token in the hashtag, so we'll mix the two together
 
 		p = _this.merge(_this.param(location.search || ''), _this.param(location.hash || ''));
-	    //B2C-Updated
-		p.state = localStorage.getItem("b2cauthState");
+
 		// If p.state
 		if (p && 'state' in p) {
+
+		    //Microsoft Azure B2C Fix
+		    p.state = localStorage.getItem("b2cauthState");//getting stored state from local storage and re-assign to state variable
 
 			// Remove any addition information
 			// E.g. p.state = 'facebook.page';
@@ -1522,7 +1531,8 @@ hello.utils.extend(hello.utils, {
 			}
 
 			// Access_token?
-			if (('access_token' in p && p.access_token) && p.network) {			
+			if (('access_token' in p && p.access_token) && p.network) {
+
 				if (!p.expires_in || parseInt(p.expires_in, 10) === 0) {
 					// If p.expires_in is unset, set to 0
 					p.expires_in = 0;
@@ -1530,7 +1540,7 @@ hello.utils.extend(hello.utils, {
 
 				p.expires_in = parseInt(p.expires_in, 10);
 				p.expires = ((new Date()).getTime() / 1e3) + (p.expires_in || (60 * 60 * 24 * 365));
-				//p.network = 'aad';
+
 				// Lets use the "state" to assign it to one of our networks
 				authCallback(p, window, parent);
 			}
@@ -1577,7 +1587,8 @@ hello.utils.extend(hello.utils, {
 		}
 
 		// Trigger a callback to authenticate
-		function authCallback(obj, window, parent) {		    
+		function authCallback(obj, window, parent) {
+
 			var cb = obj.callback;
 			var network = obj.network;
 
@@ -1796,7 +1807,7 @@ hello.utils.Event.call(hello);
 // @param callback  function (optional)
 
 hello.api = function() {
-    
+
 	// Shorthand
 	var _this = this;
 	var utils = _this.utils;
