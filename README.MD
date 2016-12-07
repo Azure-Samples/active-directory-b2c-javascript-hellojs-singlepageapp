@@ -8,31 +8,30 @@ The app is a simple web application that performs sign-in, sign-up, and sign-out
 
 ## Hello.JS 
 
-Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 (and OAuth1 with a oauth proxy) web services and querying their REST APIs.
-
-For more details about hello.js check their [Documentation](https://adodson.com/hello.js/#hellojs)
+Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 web services and querying their REST APIs. For more details about hello.js, check out their [documentation](https://adodson.com/hello.js/#hellojs).
 
 Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that they work with Azure AD B2C (with documented fixes). Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
 
 ##### Version Details
 
-Azure B2C application built with hello.js library version 1.14.0
+This application has been built with hello.js library version 1.14.0 (with documented fixes).
 
-##### Azure B2C Fixes in hello.js library
+##### Local fixes made to the hello.js library
 
-Following are the fixes has been made to make hello.js library work with Azure B2C scenarios
+The following fixes were needed to make the hello.js library work with Azure AD B2C:
 
-- Added authorize query string parameter "State" to local storage as Azure B2C authorize endpoint not returning state properly.
-	- `localStorage.setItem("b2cauthState", JSON.stringify(JSON.parse(decodeURIComponent(p.qs.state))));`
-- Re-assigning the state from the localstorage where ever required 
-	- `p.state = localStorage.getItem("b2cauthState");`
-- silent renew fails with X-Frame Options DENY error in case of expired token. To fix this code has been taken from the [github issue](https://github.com/MrSwitch/hello.js/issues/379)
+- Added the /authorize query string parameter "state" to local storage. There is a known issue with the Azure AD B2C /authorize endpoint returning an improper “state” value.
+  * ` localStorage.setItem("b2cauthState", JSON.stringify(JSON.parse(decodeURIComponent(p.qs.state))));`
 
+- Re-assigning the “state” parameter from the local storage where ever required.
+  * `p.state = localStorage.getItem("b2cauthState");`
+- Silent renewal of tokens fails with “X-Frame Options DENY” error, if tokens have already expired. Code from this github issue has been incorporated to fix this issue.
 
 
 ## Release Notes
 
-    Silent renew is not supported by Amazon and Microsoft Authentication
+- Silent renewing of access tokens is not supported by Amazon and Microsoft account.
+- Local fixes have been made to the hello.js library to make it work with Azure AD B2C.
 
 
 ## How To Run This Sample
@@ -58,7 +57,7 @@ You can also modify the sample to use your own Azure AD B2C tenant.  First, you'
 
 This sample uses three types of policies: a sign-in policy, a sign-up policy & profile editing policy.  Create one policy of each type by following [the instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish.
 
-If you already have existing policies in your B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
+If you already have existing policies in your Azure AD B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
 
 ### Step 4: Create your own application
 
@@ -70,7 +69,7 @@ Now you need to create your own appliation in your B2C tenant, so that your app 
     - `http://localhost:65328/redirect.html`
 - Copy the client ID generated for your application, so you can use it in the next step.
 
-### Step 5: Configure the sample to use your B2C tenant
+### Step 5: Configure the sample to use your Azure AD B2C tenant
 
 Now you can replace the app's default configuration with your own.  
 
