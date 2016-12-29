@@ -23,19 +23,7 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 grant: "https://login.microsoftonline.com/tfp/" + tenantName + "/" + signInPolicyName + "/oauth2/v2.0/token"
             },
             refresh: true,
-            // Authorization scopes
-            scope: {
-                // you can add as many scopes to the mapping as you want here
-                profile: 'user.read',
-                offline_access: ''
-            },
             scope_delim: ' ',
-            login: function (p) {
-                if (p.qs.response_type === 'code') {
-                    // Let's set this to an offline access to return a refresh_token
-                    p.qs.access_type = 'offline_access';
-                }
-            },
             logout: function (p) {
                 //get id_token from auth response
                 var id_token = hello(helloJsSignPolicy).getAuthResponse().id_token;
@@ -84,19 +72,7 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 grant: "https://login.microsoftonline.com/tfp/" + tenantName + "/" + signInSignUpPolicyName + "/oauth2/v2.0/token"
             },
             refresh: true,
-            // Authorization scopes
-            scope: {
-                // you can add as many scopes to the mapping as you want here
-                profile: 'user.read',
-                offline_access: ''
-            },
             scope_delim: ' ',
-            login: function (p) {
-                if (p.qs.response_type === 'code') {
-                    // Let's set this to an offline access to return a refresh_token
-                    p.qs.access_type = 'offline_access';
-                }
-            },
             logout: function () {
                 //get id_token from auth response
                 var id_token = hello(helloJsSignInSignUpPolicy).getAuthResponse().id_token;
@@ -144,19 +120,7 @@ var helloJsEditProfilePolicy = "adB2CEditProfile";
                 grant: "https://login.microsoftonline.com/tfp/" + tenantName + "/" + editProfilePolicyName + "/oauth2/v2.0/token"
             },
             refresh: true,
-            // Authorization scopes
-            scope: {
-                // you can add as many scopes to the mapping as you want here
-                profile: 'user.read',
-                offline_access: ''
-            },
             scope_delim: ' ',
-            login: function (p) {
-                if (p.qs.response_type === 'code') {
-                    // Let's set this to an offline access to return a refresh_token
-                    p.qs.access_type = 'offline_access';
-                }
-            },
             logout: function (p) {
                 //get id_token from auth response
                 var id_token = hello(helloJsEditProfilePolicy).getAuthResponse().id_token;
