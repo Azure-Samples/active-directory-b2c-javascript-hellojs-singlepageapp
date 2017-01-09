@@ -61,7 +61,7 @@ If you already have existing policies in your Azure AD B2C tenant, feel free to 
 
 ### Step 4: Create your own application
 
-Now you need to create your own appliation in your B2C tenant, so that your app has its own Application ID.  You can do so following [the generic instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-app-registration).  Be sure to include the following information in your app registration:
+Now you need to create your own application in your B2C tenant, so that your app has its own Application ID.  You can do so following [the generic instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-app-registration).  Be sure to include the following information in your app registration:
 
 - Enable the **Web App/Web API** setting for your application.
 - Add **two** rediect_uris for your app.  Their values should take the form 
