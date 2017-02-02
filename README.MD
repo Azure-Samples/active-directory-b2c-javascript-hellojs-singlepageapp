@@ -1,3 +1,9 @@
+---
+services: active-directory
+platforms: javascript
+author: dstrockis
+---
+
 # Application built on Hello.js with Azure ADB2C
 
 This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C . It assumes you have some familiarity with Azure AD B2C. If you'd like to learn all that B2C has to offer, start with our documentation at aka.ms/aadb2c.
