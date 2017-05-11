@@ -6,6 +6,9 @@ author: gsacavdm
 
 # Single-Page Application built on Hello.js with Azure AD B2C
 
+> [!NOTE]
+> Silent renewing of access tokens is not supported by all social identiy providers.
+
 This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C . It assumes you have some familiarity with Azure AD B2C. If you'd like to learn all that B2C has to offer, start with our documentation at aka.ms/aadb2c.
 
 The app is a simple web application that performs sign-in, sign-up, and sign-out functions with signIn-signUp policies and also edit profile using EditProfile Policy. Once the user signed in sample GET request is made to an API. It is intended to help get you started with Azure AD B2C in a simple web application built on hello.js, giving you the necessary tools to execute Azure AD B2C policies & securely identify users in your application.  
@@ -18,13 +21,7 @@ Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 web serv
 
 Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that they work with Azure AD B2C (with documented fixes). Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
 
-##### Version Details
-
 This application has been built with hello.js library version 1.14.1.
-
-## Release Notes
-
-- Silent renewing of access tokens is not supported by Amazon and Microsoft account.
 
 
 ## How To Run This Sample
@@ -35,23 +32,28 @@ Getting started is simple! To run this sample you will need:
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 
+If you don't have an Azure AD B2C tenant, you can follow [those instructions](https://azure.microsoft.com/documentation/articles/active-directory-b2c-get-started/) to create one. 
+If you just want to see the sample in action, you don't need to create your own tenant as the project comes with some settings associated to a test tenant and application; however it is highly recommend that you register your own app and experience going through the configuration steps below.   
+
 ### Step 1:  Clone or download this repository
 
 From your shell or command line:
 
 `git clone https://github.com/azure-samples/active-directory-b2c-dotnet-javascript-single-page-app-aspnet-web-api.git` 
 
-### Step 2: Get your own Azure AD B2C tenant
+### [OPTIONAL] Step 2: Get your own Azure AD B2C tenant
 
 You can also modify the sample to use your own Azure AD B2C tenant.  First, you'll need to create an Azure AD B2C tenant by following [these instructions](https://azure.microsoft.com/documentation/articles/active-directory-b2c-get-started).
 
-### Step 3: Create your own policies
+> *IMPORTANT*: if you choose to perform one of the optional steps, you have to perform ALL of them for the sample to work as expected.
+
+### [OPTIONAL] Step 3: Create your own policies
 
 This sample uses three types of policies: a unified sign-up/sign-in policy & a profile editing policy.  Create one policy of each type by following [the instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish.
 
 If you already have existing policies in your Azure AD B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
 
-### Step 4: Create your own application
+### [OPTIONAL] Step 4: Create your own application
 
 Now you need to create your own application in your B2C tenant, so that your app has its own Application ID.  You can do so following [the generic instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-app-registration).  Be sure to include the following information in your app registration:
 
@@ -60,7 +62,7 @@ Now you need to create your own application in your B2C tenant, so that your app
     - `http://localhost:65328/redirect.html`
 - Copy the Application ID generated for your application, so you can use it in the next step.
 
-### Step 5: Configure the sample to use your Azure AD B2C tenant
+### [OPTIONAL] Step 5: Configure the sample to use your Azure AD B2C tenant
 
 Now you can replace the app's default configuration with your own.  
 
