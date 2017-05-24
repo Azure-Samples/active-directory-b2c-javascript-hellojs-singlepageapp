@@ -65,7 +65,7 @@ Your web API registration should include the following information:
 
 ### [OPTIONAL] Step 5: Create your own application
 
-Now you need to [register your single page application in your B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-app-registration#register-a-web-application), so that it has its own Application ID.. Don't forget to grant your application API Access to the web API you registered in the previous step.
+Now you need to [register your single page application in your B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-app-registration#register-a-web-application), so that it has its own Application ID. Don't forget to grant your application API Access to the web API you registered in the previous step.
 
 Your single page application registration should include the following information:
 
@@ -81,18 +81,18 @@ Now you can replace the app's default configuration with your own.
 Open the index.html file and replace the applicationID, policy names, apiURL and scope
 
 ```javascript
-        //applicationID created in AD B2C portal
-        var applicationId = 'e760cab2-b9a1-4c0d-86fb-ff7084abd902';
+//applicationID created in AD B2C portal
+var applicationId = 'e760cab2-b9a1-4c0d-86fb-ff7084abd902';
 
-        //update the policy names with the exact name from the AD B2C policies blade
-        var policies = {
-            signInSignUpPolicy: "b2c_1_susi",
-            editProfilePolicy: "b2c_1_edit_profile"
-        };
+//update the policy names with the exact name from the AD B2C policies blade
+var policies = {
+  signInSignUpPolicy: "b2c_1_susi",
+  editProfilePolicy: "b2c_1_edit_profile"
+};
 
-        //API url
-        var apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
-        var scope = 'openid https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read';
+//API url
+var apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
+var scope = 'openid https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read';
 ```
 Open the aadb2c.js and replace the tenant name and policy names
 
