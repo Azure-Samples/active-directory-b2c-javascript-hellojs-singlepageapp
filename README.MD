@@ -16,18 +16,17 @@ The app is a simple web application that performs sign-in, sign-up, and sign-out
 
 ## Hello.JS 
 
-Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 web services and querying their REST APIs. For more details about hello.js, check out their [documentation](https://adodson.com/hello.js/#hellojs).
+Hello.js is a client-side JavaScript SDK for authenticating with OAuth2 web services and querying REST APIs. For more details about hello.js, check out their [documentation](https://adodson.com/hello.js/#hellojs).
 
-Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that they work with Azure AD B2C (with documented fixes). Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
+Microsoft has tested the [hello.js](https://github.com/MrSwitch/hello.js) library in basic scenarios and confirmed that it works with Azure AD B2C. Microsoft does not provide fixes for this library and has not done a review of the library. Issues and feature requests should be directed to the library’s open-source project.
 
 This application has been built with hello.js library version 1.14.1.
-
 
 ## How To Run This Sample
 
 Getting started is simple! To run this sample you will need:
 
-- Visual Studio 2015
+- Visual Studio 2015 or Visual Studio 2017
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 
@@ -52,20 +51,34 @@ This sample uses three types of policies: a unified sign-up/sign-in policy & a p
 
 If you already have existing policies in your Azure AD B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
 
-### [OPTIONAL] Step 4: Create your own application
+### [OPTIONAL] Step 4: Create your own Web API
 
-Now you need to create your own application in your B2C tenant, so that your app has its own Application ID.  You can do so following [the generic instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-app-registration).  Be sure to include the following information in your app registration:
+This sample calls an API at https://fabrikamb2chello.azurewebsites.net which has the same code as the sample [Node.js Web API with Azure AD B2C](https://github.com/Azure-Samples/active-directory-b2c-javascript-nodejs-webapi). You'll need your own API or at the very least, you'll need to [register a Web API with Azure AD B2C](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-app-registration#register-a-web-api) so that you can define the scopes that your single page application will request access tokens for. 
+
+Your web API registration should include the following information:
 
 - Enable the **Web App/Web API** setting for your application.
-- Add the redirect_uri for your app.  Their values should take the form 
-    - `http://localhost:65328/redirect.html`
+- Set the **Reply URL** to the appropriate value indicated in the sample or provide any URL if you're only doing the web api registration, for example `https://myapi`.
+- Make sure you also provide a **AppID URI**, for example `demoapi`, this is used to construct the scopes that are configured in you single page application's code.
+- (Optional) Once you're app is created, open the app's **Published Scopes** blade and add any extra scopes you want.
+- Copy the **AppID URI** and **Published Scopes values**, so you can input them in your single page applicaton's code.
+
+### [OPTIONAL] Step 5: Create your own application
+
+Now you need to [register your single page application in your B2C tenant](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-app-registration#register-a-web-application), so that it has its own Application ID.. Don't forget to grant your application API Access to the web API you registered in the previous step.
+
+Your single page application registration should include the following information:
+
+- Enable the **Web App/Web API** setting for your application.
+- Set the **Reply URL** for your app to `http://localhost:65328/redirect.html`
+- Once you're app is created, open the app's **API access** blade and **Add** the API you created in the previous step.
 - Copy the Application ID generated for your application, so you can use it in the next step.
 
-### [OPTIONAL] Step 5: Configure the sample to use your Azure AD B2C tenant
+### [OPTIONAL] Step 6: Configure the sample to use your Azure AD B2C tenant
 
 Now you can replace the app's default configuration with your own.  
 
-Open the index.html file and replace the applicationID and policy names
+Open the index.html file and replace the applicationID, policy names, apiURL and scope
 
 ```javascript
         //applicationID created in AD B2C portal
@@ -81,7 +94,7 @@ Open the index.html file and replace the applicationID and policy names
         var apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
         var scope = 'openid https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read';
 ```
-open the aadb2c.js and replace the tenant name and policy names
+Open the aadb2c.js and replace the tenant name and policy names
 
 ```javascript
 var tenantName = "fabrikamb2c.onmicrosoft.com";
@@ -90,9 +103,9 @@ var editProfilePolicyName = "b2c_1_edit_profile";
 var redirect_uri = "http://localhost:65328/";
 ```
 
-### Step 6:  Run the sample
+### Step 7: Run the sample
 
-Open the B2C-v2jsapp.sln in Visual Studio 2015.
+Open the B2C-v2jsapp.sln in Visual Studio 2015 or Visual Studio 2017.
 Clean and rebuild the solution, and run it.  
 You can now sign up / sign in / edit profile to your application using the accounts you configured in your respective policies. 
 Once the user is signed in with a policy make a call to the API.
