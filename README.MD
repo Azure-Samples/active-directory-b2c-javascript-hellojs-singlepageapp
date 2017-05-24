@@ -8,7 +8,7 @@ author: gsacavdm
 
 > **IMPORTANT NOTE: Silent renewing of access tokens is not supported by all social identity providers.**
 
-This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C . It assumes you have some familiarity with Azure AD B2C. If you'd like to learn all that B2C has to offer, start with our documentation at aka.ms/aadb2c.
+This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C . It assumes you have some familiarity with Azure AD B2C. If you'd like to learn all that B2C has to offer, start with [our documentation](http://aka.ms/aadb2c).
 
 The app is a simple web application that performs sign-in, sign-up, and sign-out functions with signIn-signUp policies and also edit profile using EditProfile Policy. Once the user signed in sample GET request is made to an API. It is intended to help get you started with Azure AD B2C in a simple web application built on hello.js, giving you the necessary tools to execute Azure AD B2C policies & securely identify users in your application.  
 
