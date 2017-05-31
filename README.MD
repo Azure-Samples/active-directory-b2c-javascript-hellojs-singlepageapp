@@ -37,7 +37,9 @@ If you just want to see the sample in action, you don't need to create your own 
 
 From your shell or command line:
 
-`git clone https://github.com/azure-samples/active-directory-b2c-dotnet-javascript-single-page-app-aspnet-web-api.git` 
+```powershell
+git clone https://github.com/azure-samples/active-directory-b2c-dotnet-javascript-single-page-app-aspnet-web-api.git
+```
 
 ### [OPTIONAL] Step 2: Get your own Azure AD B2C tenant
 
@@ -61,7 +63,7 @@ Your web API registration should include the following information:
 - Set the **Reply URL** to the appropriate value indicated in the sample or provide any URL if you're only doing the web api registration, for example `https://myapi`.
 - Make sure you also provide a **AppID URI**, for example `demoapi`, this is used to construct the scopes that are configured in you single page application's code.
 - (Optional) Once you're app is created, open the app's **Published Scopes** blade and add any extra scopes you want.
-- Copy the **AppID URI** and **Published Scopes values**, so you can input them in your single page applicaton's code.
+- Copy the **AppID URI** and **Published Scopes values**, so you can input them in your application's code.
 
 ### [OPTIONAL] Step 5: Create your own application
 
