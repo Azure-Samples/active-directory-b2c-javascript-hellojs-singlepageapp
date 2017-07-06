@@ -1,7 +1,7 @@
 ---
 services: active-directory-b2c
 platforms: javascript
-author: gsacavdm
+author: saeeda
 ---
 
 # Single-Page Application built on Hello.js with Azure AD B2C
