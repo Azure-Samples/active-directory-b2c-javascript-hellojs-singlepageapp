@@ -12,7 +12,7 @@ urlFragment: spa-hellojs-azure-ad-b2c
 
 # Single-Page Application built on Hello.js with Azure AD B2C
 
-> **IMPORTANT NOTE: Silent renewing of access tokens is not supported by all social identity providers.**
+**IMPORTANT NOTE: Silent renewing of access tokens is not supported by all social identity providers.**
 
 This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C. It assumes you have some familiarity with Azure AD B2C. If you'd like to learn all that B2C has to offer, start with [our documentation](http://aka.ms/aadb2c).
 
