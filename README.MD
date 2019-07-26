@@ -36,7 +36,7 @@ Getting started is simple! To run this sample you will need:
 - An Internet connection
 - An Azure subscription (a free trial is sufficient)
 
-If you don't have an Azure AD B2C tenant, you can follow [those instructions](https://azure.microsoft.com/documentation/articles/active-directory-b2c-get-started/) to create one. 
+If you don't have an Azure AD B2C tenant, you can follow [those instructions](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant) to create one. 
 If you just want to see the sample in action, you don't need to create your own tenant as the project comes with some settings associated to a test tenant and application; however it is highly recommend that you register your own app and experience going through the configuration steps below.   
 
 ### Step 1:  Clone or download this repository
