@@ -102,7 +102,7 @@ var policies = {
 var apiURL = 'https://fabrikamb2chello.azurewebsites.net/hello';
 var scope = 'openid https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read';
 ```
-Open the aadb2c.js and replace the tenant name and policy names
+Open the `aadb2c.js` and replace the tenant name and policy names
 
 ```javascript
 var tenantName = "fabrikamb2c.onmicrosoft.com";
