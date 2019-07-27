@@ -49,7 +49,7 @@ git clone https://github.com/Azure-Samples/active-directory-b2c-javascript-hello
 
 ### [OPTIONAL] Step 2: Get your own Azure AD B2C tenant
 
-You can also modify the sample to use your own Azure AD B2C tenant.  First, you'll need to create an Azure AD B2C tenant by following [these instructions](https://azure.microsoft.com/documentation/articles/active-directory-b2c-get-started).
+You can also modify the sample to use your own Azure AD B2C tenant.  First, you'll need to create an Azure AD B2C tenant by following [these instructions](https://docs.microsoft.com/azure/active-directory-b2c/tutorial-create-tenant).
 
 > *IMPORTANT*: if you choose to perform one of the optional steps, you have to perform ALL of them for the sample to work as expected.
 
