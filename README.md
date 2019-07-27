@@ -55,7 +55,7 @@ You can also modify the sample to use your own Azure AD B2C tenant.  First, you'
 
 ### [OPTIONAL] Step 3: Create your own policies
 
-This sample uses three types of policies: a unified sign-up/sign-in policy & a profile editing policy.  Create one policy of each type by following [the instructions here](https://azure.microsoft.com/documentation/articles/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish.
+This sample uses three types of policies: a unified sign-up/sign-in policy & a profile editing policy.  Create one policy of each type by following [the instructions here](https://docs.microsoft.com/azure/active-directory-b2c/active-directory-b2c-reference-policies).  You may choose to include as many or as few identity providers as you wish.
 
 If you already have existing policies in your Azure AD B2C tenant, feel free to re-use those.  No need to create new ones just for this sample.
 
@@ -113,8 +113,11 @@ var redirect_uri = "http://localhost:65328/";
 
 ### Step 7: Run the sample
 
-Open the B2C-v2jsapp.sln in Visual Studio 2015 or Visual Studio 2017.
-Clean and rebuild the solution, and run it.  
+Open the `B2C-v2jsapp.sln` in Visual Studio 2015 or Visual Studio 2017.
+
+Clean and rebuild the solution, and run it.
+
 You can now sign up / sign in / edit profile to your application using the accounts you configured in your respective policies. 
+
 Once the user is signed in with a policy make a call to the API.
 
