@@ -1,13 +1,13 @@
 ---
 page_type: sample
-description: "This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C."
 languages:
 - javascript
-- nodejs
+- html
+- csharp
 products:
 - azure
-- azure-active-directory
-urlFragment: spa-hellojs-azure-ad-b2c
+description: "This sample shows how to build a web application using Hello.js that performs identity management with Azure AD B2C."
+urlFragment: active-directory-b2c-javascript-hellojs-singlepageapp
 ---
 
 # Single-Page Application built on Hello.js with Azure AD B2C
